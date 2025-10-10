@@ -1,10 +1,304 @@
+
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale">
-  </head>
-  <body>
-    <h1>Hello, world</h1>
-  </body>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portofolio — [Syashi]</title>
+  <meta name="description" content="Portofolio interaktif untuk melamar magang — profil, pendidikan, pengalaman organisasi, dan contoh pembuatan website." />
+  <style>
+    :root{
+      --accent:#7c5cff;
+      --bg:#0f0f13;
+      --card:#0f1724;
+      --muted:#9aa4b2;
+      --glass: rgba(255,255,255,0.03);
+      --radius:14px;
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,#071020 0%, #081225 50%, #071428 100%);
+      color:#e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:28px;
+    }
+
+    .container{max-width:1100px;margin:0 auto}
+    header{
+      display:flex;gap:18px;align-items:center;justify-content:space-between;margin-bottom:20px
+    }
+    .brand{display:flex;gap:16px;align-items:center}
+    .logo{
+      width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#45b3ff);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;color:white;box-shadow:0 6px 18px rgba(0,0,0,0.4)
+    }
+    h1{margin:0;font-size:20px}
+    .sub{color:var(--muted);font-size:13px}
+
+    main{display:grid;grid-template-columns:320px 1fr;gap:22px}
+
+    /* sidebar */
+    .card{background:var(--glass);border-radius:var(--radius);padding:18px;backdrop-filter:blur(6px);box-shadow:inset 0 1px 0 rgba(255,255,255,0.02),0 8px 30px rgba(2,6,23,0.6)}
+    .profile-pic{width:100%;height:220px;border-radius:12px;background-image:url('https://via.placeholder.com/600x400?text=Foto+Profil');background-size:cover;background-position:center;margin-bottom:14px}
+    .name{font-size:18px;font-weight:700}
+    .role{color:var(--muted);font-size:13px;margin-bottom:12px}
+    .badges{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+    .badge{background:rgba(255,255,255,0.04);padding:6px 10px;border-radius:999px;font-size:12px}
+    .contact a{display:block;color:var(--muted);text-decoration:none;margin:6px 0}
+    .cta{display:flex;gap:8px;margin-top:12px}
+    .btn{padding:10px 12px;border-radius:10px;border:0;background:linear-gradient(90deg,var(--accent),#45b3ff);color:white;cursor:pointer;font-weight:600}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+
+    /* main content */
+    .section{margin-bottom:20px}
+    .section h2{margin:0 0 10px;font-size:16px}
+    .timeline{display:flex;flex-direction:column;gap:10px}
+    .item{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.02)}
+    .item .muted{color:var(--muted);font-size:13px}
+
+    /* portfolio grid */
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+    .project{border-radius:12px;overflow:hidden;background:linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.2));cursor:pointer;transition:transform .18s ease,box-shadow .18s ease}
+    .project:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(2,6,23,0.6)}
+    .project img{width:100%;height:150px;object-fit:cover;display:block}
+    .project .meta{padding:10px}
+    .project .title{font-weight:700}
+    .project .stack{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* modal */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:28px}
+    .modal.show{display:flex}
+    .modal .panel{width:100%;max-width:900px;background:linear-gradient(180deg,#071427,#051227);border-radius:14px;overflow:hidden}
+    .modal .panel .hero{height:320px;background-size:cover;background-position:center}
+    .modal .panel .content{padding:18px}
+    .modal .close{position:absolute;right:36px;top:26px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.04);padding:8px;border-radius:10px;cursor:pointer}
+
+    footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
+
+    /* responsive */
+    @media (max-width:880px){main{grid-template-columns:1fr;}
+      .profile-pic{height:180px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">NK</div>
+        <div>
+          <h1>[Syashi] — Portofolio</h1>
+          <div class="sub">Mahasiswa / Web Developer Junior • Melamar Magang Frontend</div>
+        </div>
+      </div>
+      <div>
+        <button class="btn" id="downloadTxt">Download CV (TXT)</button>
+        <button class="btn ghost" id="printCv">Download CV (PDF)</button>
+      </div>
+    </header>
+
+    <main>
+      <aside class="card">
+        <div class="profile-pic" role="img" aria-label="Foto profil"></div>
+        <div class="name">Syashi Divani</div>
+        <div class="role">Calon Magang Frontend • HTML • CSS • JavaScript</div>
+        <div class="badges">
+          <div class="badge">HTML</div>
+          <div class="badge">CSS</div>
+          <div class="badge">JavaScript</div>
+          <div class="badge">React (pemula)</div>
+        </div>
+        <div class="section contact">
+          <div class="muted">Kontak</div>
+          <a href="mailto:emailkamu@example.com">emailkamu@example.com</a>
+          <a href="#">linkedin.com/in/username</a>
+          <a href="#">github.com/username</a>
+        </div>
+        <div class="cta">
+          <button class="btn" onclick="scrollToSection('portfolio')">Lihat Portofolio</button>
+          <button class="btn ghost" onclick="scrollToSection('experience')">Pengalaman</button>
+        </div>
+      </aside>
+
+      <section>
+        <section class="card section">
+          <h2>Ringkasan Profil</h2>
+          <p>Saya mahasiswa jurusan [Rekayasa Perangkat Lunak] yang antusias pada pembuatan antarmuka web interaktif. Berpengalaman membuat beberapa proyek website sederhana dan siap belajar di lingkungan magang untuk meningkatkan keterampilan frontend dan kolaborasi tim.</p>
+          <h3 style="margin-top:12px">Kenapa saya cocok untuk magang</h3>
+          <ul style="color:var(--muted)">
+            <li>Dasar kuat HTML, CSS, dan JavaScript</li>
+            <li>Pernah membuat 2+ proyek web dan dokumentasi</li>
+            <li>Mampu bekerja tim, cepat belajar, dan disiplin</li>
+          </ul>
+        </section>
+
+        <section class="card section" id="education">
+          <h2>Pendidikan</h2>
+          <div class="timeline">
+            <div class="item">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div>
+                  <div style="font-weight:700">Universitas Contoh</div>
+                  <div class="muted">S1 [Rekayasa Perangkat Lunak] — 2022 — Sekarang</div>
+                </div>
+                <div class="muted">IPK: 3.6</div>
+              </div>
+              <div class="muted" style="margin-top:8px">Kursus relevan: Pemrograman Web, Desain UI/UX, Struktur Data dasar</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card section" id="experience">
+          <h2>Pengalaman Organisasi</h2>
+          <div class="timeline">
+            <div class="item">
+              <div style="font-weight:700">Himpunan Mahasiswa Teknologi</div>
+              <div class="muted">Anggota Divisi IT — 2023 — Sekarang</div>
+              <div class="muted">Mengelola website acara, mendukung teknis, berkolaborasi dalam tim 5 orang.</div>
+            </div>
+
+            <div class="item">
+              <div style="font-weight:700">Komunitas Developer Kampus</div>
+              <div class="muted">Koordinator Workshop — 2022</div>
+              <div class="muted">Mengorganisasi workshop HTML/CSS untuk 60+ peserta.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card section" id="portfolio">
+          <h2>Portofolio — Contoh Pembuatan Website</h2>
+          <div class="grid" id="projects">
+            <!-- Project 1 -->
+            <article class="project" data-title="Landing Page Kafe" data-stack="HTML, CSS, JavaScript" data-image="https://via.placeholder.com/900x560?text=Screenshot+Kafe" data-desc="Landing page responsif untuk kafe fiktif dengan animasi scroll dan galeri produk.">
+              <img src="https://via.placeholder.com/600x400?text=Screenshot+Kafe" alt="Screenshot Landing Page Kafe">
+              <div class="meta">
+                <div class="title">Landing Page Kafe</div>
+                <div class="stack">HTML • CSS • JavaScript</div>
+              </div>
+            </article>
+
+            <!-- Project 2 -->
+            <article class="project" data-title="Dashboard Sekolah" data-stack="HTML, Bootstrap, Chart.js" data-image="https://via.placeholder.com/900x560?text=Screenshot+Dashboard" data-desc="Dashboard sederhana untuk manajemen data siswa, menampilkan statistik dan tabel interaktif.">
+              <img src="https://via.placeholder.com/600x400?text=Screenshot+Dashboard" alt="Screenshot Dashboard Sekolah">
+              <div class="meta">
+                <div class="title">Dashboard Sekolah</div>
+                <div class="stack">HTML • Bootstrap • Chart.js</div>
+              </div>
+            </article>
+
+          </div>
+
+          <p style="color:var(--muted);margin-top:12px">Klik kartu proyek untuk melihat detail dan screenshot lebih besar.</p>
+        </section>
+
+        <section class="card section">
+          <h2>Siap Melamar — Dokumen & Cover Letter</h2>
+          <p class="muted">Gunakan tombol di atas untuk mendownload CV (format teks) atau cetak halaman CV menjadi PDF. Berikut contoh singkat cover letter yang bisa Anda gunakan saat melamar magang:</p>
+          <div class="item" style="margin-top:10px">
+            <strong>Contoh Cover Letter</strong>
+            <p class="muted">Yth. Tim Rekrutmen,
+            <br>Saya, [Syashi Divani], mahasiswa [Rekayasa Perangkat Lunak] di [SMK Informatika Utama], berminat untuk mengikuti program magang pada posisi Frontend Developer. Saya memiliki pemahaman dasar pada HTML, CSS, dan JavaScript serta telah menyelesaikan beberapa proyek website yang saya lampirkan dalam portofolio ini. Saya siap belajar cepat, bekerja sama dalam tim, dan berkontribusi pada proyek nyata. Terima kasih atas perhatiannya.</p>
+          </div>
+        </section>
+
+      </section>
+    </main>
+
+    <footer>
+      Dibuat dengan ♥ — Portofolio interaktif untuk keperluan melamar magang.
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+      <div class="panel">
+        <div class="hero" id="modalHero" style="background-image:url('https://via.placeholder.com/900x560?text=Preview')"></div>
+        <div class="content">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <h3 id="modalTitle">Portofolio</h3>
+              <div class="muted" id="modalStack">Tech stack</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <button class="btn ghost" id="openDemo">Buka Demo</button>
+              <button class="btn" id="closeModal">Tutup</button>
+            </div>
+          </div>
+          <p id="modalDesc" style="margin-top:12px;color:var(--muted)"></p>
+        </div>
+      </div>
+      <button class="close" id="closeX">✕</button>
+    </div>
+
+  </div>
+
+  <script>
+    // Utility: smooth scroll to section
+    function scrollToSection(id){
+      const el = document.getElementById(id);
+      if(!el) return; el.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+
+    // Project modal interactions
+    const projects = document.querySelectorAll('.project');
+    const modal = document.getElementById('modal');
+    const modalHero = document.getElementById('modalHero');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalStack = document.getElementById('modalStack');
+    const modalDesc = document.getElementById('modalDesc');
+    const closeModal = document.getElementById('closeModal');
+    const closeX = document.getElementById('closeX');
+    const openDemo = document.getElementById('openDemo');
+
+    projects.forEach(p => p.addEventListener('click', ()=>{
+      const title = p.dataset.title;
+      const stack = p.dataset.stack;
+      const image = p.dataset.image;
+      const desc = p.dataset.desc;
+      modalHero.style.backgroundImage = `url('${image}')`;
+      modalTitle.textContent = title;
+      modalStack.textContent = stack;
+      modalDesc.textContent = desc;
+      openDemo.onclick = ()=>{
+        // Demo placeholder: open a new tab with a simple demo page (data URL) — replace with real demo link when available
+        const demoHtml = `<!doctype html><html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>${title} — Demo</title></head><body style=\"font-family:sans-serif;padding:40px;\"><h1>${title} (Demo)</h1><p>Tech stack: ${stack}</p><p>${desc}</p><p><em>Ini adalah demo sederhana — untuk magang, siapkan link GitHub atau hosting Demo yang nyata.</em></p></body></html>`;
+        const url = 'data:text/html;charset=utf-8,' + encodeURIComponent(demoHtml);
+        window.open(url, '_blank');
+      }
+      modal.classList.add('show');
+    }));
+
+    function hideModal(){ modal.classList.remove('show'); }
+    closeModal.addEventListener('click', hideModal);
+    closeX.addEventListener('click', hideModal);
+    modal.addEventListener('click', (e)=>{ if(e.target === modal) hideModal(); });
+
+    // Download CV as TXT
+    document.getElementById('downloadTxt').addEventListener('click', ()=>{
+      const name = 'Nama Lengkap';
+      const cv = `CV - ${name}\n\nProfil:\nSaya mahasiswa [Jurusan] di [Universitas]. Antusias pada frontend development.\n\nPendidikan:\n- [Universitas Contoh] — S1 [Jurusan] (2022 - sekarang)\n\nPengalaman Organisasi:\n- Himpunan Mahasiswa Teknologi — Divisi IT\n- Komunitas Developer Kampus — Koordinator Workshop\n\nKeterampilan:\nHTML, CSS, JavaScript, Bootstrap, dasar React\n\nPortofolio:\n1) Landing Page Kafe — HTML, CSS, JavaScript — https://github.com/username/project-kafe\n2) Dashboard Sekolah — HTML, Bootstrap, Chart.js — https://github.com/username/project-dashboard\n\nKontak:\nemailkamu@example.com\nlinkedin.com/in/username\ngithub.com/username\n`;
+      const blob = new Blob([cv], {type: 'text/plain'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = `${name.replace(/\s+/g,'_')}_CV.txt`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    });
+
+    // Print CV to PDF (open new window with printable resume)
+    document.getElementById('printCv').addEventListener('click', ()=>{
+      const content = `<!doctype html><html><head><meta charset=\\"utf-8\\"><meta name=\\"viewport\\" content=\\"width=device-width,initial-scale=1\\"><title>CV</title><style>body{font-family:Arial,Helvetica,sans-serif;padding:28px;color:#111} h1{margin-bottom:6px} .muted{color:#555}</style></head><body><h1>Nama Lengkap</h1><div class=\\"muted\\">Calon Magang Frontend</div><h2>Kontak</h2><div>emailkamu@example.com | linkedin.com/in/username | github.com/username</div><h2>Pendidikan</h2><div>[Universitas Contoh] — S1 [Jurusan] (2022 - sekarang)</div><h2>Pengalaman</h2><div>Himpunan Mahasiswa Teknologi — Divisi IT</div><h2>Keterampilan</h2><div>HTML, CSS, JavaScript, Bootstrap, dasar React</div><h2>Portofolio</h2><ol><li>Landing Page Kafe — HTML, CSS, JavaScript</li><li>Dashboard Sekolah — HTML, Bootstrap, Chart.js</li></ol></body></html>`;
+      const w = window.open('', '_blank');
+      w.document.write(content);
+      w.document.close();
+      // give user a hint to print to PDF
+      setTimeout(()=>{ w.focus(); },250);
+    });
+
+    // small accessibility: keyboard close
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') hideModal(); });
+
+    // Simple form: if user wants to adapt this page, we can add more interactions here
+  </script>
+</body>
 </html>
